@@ -2,20 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using Microsoft.MixedReality.Toolkit.UI;
 
 public class PlanetSelector : MonoBehaviour
 {
     public GameObject[] planetList;
-    [SerializeField] private int currentPlanet;
     public GameObject buttonObject;
+    public GameObject targetObject;
+    private int currentPlanet;
+    private float topSpeed = 30;
     
-    // Start is called before the first frame update
+    
     void Start()
     {
         resetCycle();
-        
     }
 
     public void cyclePlanet()
@@ -30,6 +30,7 @@ public class PlanetSelector : MonoBehaviour
             resetCycle();       
         } 
         planetName();
+        getPlanetInfo();
     }
 
     private void planetName()
@@ -41,11 +42,30 @@ public class PlanetSelector : MonoBehaviour
     private void resetCycle()
     {
         currentPlanet = 0;
+        getPlanetInfo();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void getPlanetInfo() 
     {
-        
+        string currentPlanetName = planetList[currentPlanet].name;
+        targetObject = GameObject.Find(currentPlanetName);
+    }
+
+    public void increasePlanetSpeed() 
+    {      
+        if (targetObject.GetComponent<PlanetMover>().orbitSpeed >= topSpeed)
+        {
+            return;
+        }
+         targetObject.GetComponent<PlanetMover>().orbitSpeed++;
+    }
+
+    public void decreasePlanetSpeed()
+    {
+       if (targetObject.GetComponent<PlanetMover>().orbitSpeed <= 0)
+       {
+           return;
+       }
+        targetObject.GetComponent<PlanetMover>().orbitSpeed--;
     }
 }
